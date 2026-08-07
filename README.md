@@ -97,7 +97,6 @@ Upgrade to premium providers only when desired.
 Rather than forcing users to remember model names, OP-orca organizes models by capability.
 
 Filter models by
-
 - ⚡ Speed
 - ⭐ Community Rating
 - 💲 Cost
@@ -127,7 +126,6 @@ Ollama
 ## Secret Store
 
 Encrypted local configuration for
-
 - API Keys
 - Tokens
 - OAuth Credentials
@@ -142,12 +140,10 @@ Secrets never leave your machine.
 Persistent semantic memory.
 
 Supports
-
 - ChromaDB
 - LanceDB
 
 Future
-
 - SQLite Vector
 - pgvector
 - Milvus
@@ -172,15 +168,10 @@ Examples
 
 ```
 Writing Office
-
 Research Office
-
 Development Office
-
 Business Office
-
 Marketing Office
-
 Legal Office
 ```
 
@@ -194,19 +185,15 @@ Example
 
 ```
 Researcher
-
 ↓
 
 Writer
-
 ↓
 
 Reviewer
-
 ↓
 
 Editor
-
 ↓
 
 Formatter
@@ -224,11 +211,8 @@ Instead of sequential collaboration
 
 ```
 Research A
-
 Research B
-
 Research C
-
 Research D
 ```
 
@@ -272,19 +256,15 @@ Rather than asking isolated questions, Streams continuously improve work through
 
 ```
 Search
-
 ↓
 
 Build
-
 ↓
 
 Evaluate
-
 ↓
 
 Improve
-
 ↓
 
 Repeat
@@ -601,11 +581,8 @@ The goal is to build an orchestration platform that is
 - infinitely extensible
 
 One interface.
-
 Any model.
-
 Any provider.
-
 Any workflow.
 
 **Build once. Orchestrate everything.**
