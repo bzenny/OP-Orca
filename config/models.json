@@ -1,1 +1,35 @@
-
+[
+  {
+    "id": "op-orca/free-fast",
+    "name": "Qwen 2.5 (Local Fast)",
+    "provider": "Ollama",
+    "speed": 5,
+    "rating": 4.5,
+    "cost": 0,
+    "depth": 3,
+    "endpoint": "http://localhost:11434/api/generate",
+    "model_param": "qwen2.5:latest"
+  },
+  {
+    "id": "op-orca/free-depth",
+    "name": "DeepSeek R1 (Local Reasoning)",
+    "provider": "Ollama",
+    "speed": 3,
+    "rating": 4.9,
+    "cost": 0,
+    "depth": 5,
+    "endpoint": "http://localhost:11434/api/generate",
+    "model_param": "deepseek-r1:latest"
+  },
+  {
+    "id": "op-orca/cloud-free",
+    "name": "Llama 3.1 8B (Cloud Free)",
+    "provider": "OpenRouter",
+    "speed": 4,
+    "rating": 4.2,
+    "cost": 0,
+    "depth": 3,
+    "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+    "model_param": "meta-llama/llama-3.1-8b-instruct:free"
+  }
+]
