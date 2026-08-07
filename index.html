@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OP-orca Dashboard</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Dexie.js (Browser Datastore) -->
+  <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+  <!-- Alpine.js -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Application Scripts -->
+  <script src="./assets/db.js"></script>
+  <script src="./assets/app.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col" x-data="orcaApp">
+
+  <!-- Minimalist Header -->
+  <header class="border-b border-slate-800 bg-slate-950 p-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <h1 class="text-xl font-bold tracking-wider text-cyan-400">OP-orca</h1>
+      <span class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded">MVP v0.1</span>
+    </div>
+    
+    <!-- Model Choice Mechanic -->
+    <div class="flex items-center gap-4">
+      <label class="text-xs text-slate-400">Engine:</label>
+      <select x-model="selectedModel" class="bg-slate-800 text-xs border border-slate-700 rounded px-3 py-1.5 focus:outline-none focus:border-cyan-500">
+        <template x-for="m in models" :key="m.id">
+          <option :value="m.id" x-text="`${m.name} [Depth: ${m.depth}/5 | Cost: $${m.cost}]`"></option>
+        </template>
+      </select>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="flex flex-1 overflow-hidden">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 border-r border-slate-800 bg-slate-950 p-4 flex flex-col gap-2">
+      <button @click="activeTab = 'chat'" :class="activeTab === 'chat' ? 'bg-cyan-950 text-cyan-400 border-cyan-800' : 'text-slate-400 hover:bg-slate-900'" class="w-full text-left px-3 py-2 text-sm rounded border border-transparent transition">
+        💬 Chat Terminal
+      </button>
+      <button @click="activeTab = 'secrets'" :class="activeTab === 'secrets' ? 'bg-cyan-950 text-cyan-400 border-cyan-800' : 'text-slate-400 hover:bg-slate-900'" class="w-full text-left px-3 py-2 text-sm rounded border border-transparent transition">
+        🔑 Secret Store
+      </button>
+      <button @click="activeTab = 'streams'" :class="activeTab === 'streams' ? 'bg-cyan-950 text-cyan-400 border-cyan-800' : 'text-slate-400 hover:bg-slate-900'" class="w-full text-left px-3 py-2 text-sm rounded border border-transparent transition">
+        🔄 [streams] Harness
+      </button>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="flex-1 p-6 overflow-y-auto flex flex-col">
+      
+      <!-- Chat Terminal Tab -->
+      <div x-show="activeTab === 'chat'" class="flex-1 flex flex-col gap-4">
+        <div class="flex-1 bg-slate-950 border border-slate-800 rounded p-4 font-mono text-sm overflow-y-auto min-h-[300px]">
+          <template x-if="response">
+            <div class="whitespace-pre-wrap text-slate-200" x-text="response"></div>
+          </template>
+          <template x-if="!response">
+            <div class="text-slate-600 italic">Select an engine above and input intent to begin orchestration...</div>
+          </template>
+        </div>
+
+        <div class="flex gap-2">
+          <textarea x-model="prompt" placeholder="Execute prompt or batch~string directive..." class="flex-1 bg-slate-950 border border-slate-800 rounded p-3 text-sm focus:outline-none focus:border-cyan-500 resize-none h-20"></textarea>
+          <button @click="runPrompt()" :disabled="loading" class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-semibold px-6 rounded text-sm transition disabled:opacity-50">
+            <span x-text="loading ? 'Running...' : 'Execute'"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Secret Store Tab -->
+      <div x-show="activeTab === 'secrets'" class="max-w-md flex flex-col gap-4">
+        <h2 class="text-lg font-semibold text-slate-200">Local Secret Store</h2>
+        <p class="text-xs text-slate-400">Keys are stored strictly in your browser's local IndexedDB instance and never sent to external servers.</p>
+        
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">OpenRouter Free API Key</label>
+          <input type="password" x-model="apiKey" placeholder="sk-or-v1-..." class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-cyan-500">
+        </div>
+
+        <button @click="saveKey()" class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-semibold py-2 px-4 rounded text-sm self-start">
+          Save Secrets
+        </button>
+      </div>
+
+      <!-- Streams Tab Placeholder -->
+      <div x-show="activeTab === 'streams'" class="flex flex-col gap-2">
+        <h2 class="text-lg font-semibold text-slate-200">Project Stream Loops</h2>
+        <p class="text-xs text-slate-400">Active recursive search-build-evaluate execution states.</p>
+        <div class="border border-dashed border-slate-800 rounded p-8 text-center text-slate-600 text-sm">
+          No active streams initialized. Load a YAML template from <code class="text-cyan-500">streams/templates/</code> to launch.
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>
