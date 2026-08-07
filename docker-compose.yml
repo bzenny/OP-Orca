@@ -1,1 +1,46 @@
+version: '3.8'
 
+services:
+  # Layer 1: Minimalist Local Dashboard UI
+  op-orca-ui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: op-orca-ui
+    ports:
+      - "3000:8080"
+    environment:
+      - OPENAI_API_BASE_URL=http://op-orca-router:4000/v1
+      - OPENAI_API_KEY=sk-op-orca-local-key
+      - WEBUI_NAME=OP-orca
+      - ENABLE_OLLAMA_API=False
+    volumes:
+      - op-orca-ui-data:/app/backend/data
+    restart: unless-stopped
+    depends_on:
+      - op-orca-router
+
+  # Layer 2: LiteLLM Routing Proxy (Speed, Rating, Cost, Depth)
+  op-orca-router:
+    image: ghcr.io/berriai/litellm:main-v1.0.0
+    container_name: op-orca-router
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./config/litellm-config.yaml:/app/config.yaml
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  # Layer 3: Local Zero-Cost Inference Engine (Ollama)
+  op-orca-engine:
+    image: ollama/ollama:latest
+    container_name: op-orca-engine
+    ports:
+      - "11434:11434"
+    volumes:
+      - op-orca-ollama-models:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  op-orca-ui-data:
+  op-orca-ollama-models:
