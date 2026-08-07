@@ -1,0 +1,33 @@
+stream_id: "market-research-template"
+version: "1.0"
+description: "Recursive search, build, and evaluation loop for deep research topics."
+model_preference: "op-orca/free-depth"
+loop_limit: 3
+
+harness:
+  recall_box: "general_knowledge"
+  offices:
+    - name: "Research Office"
+      role: "Information gathering, factual verification, and raw data extraction"
+    - name: "Writing Office"
+      role: "Document synthesis, Markdown formatting, and executive summary"
+
+workflow:
+  - step: 1
+    action: "search"
+    source: "recall_box + web_search"
+    instruction: "Gather core context, empirical claims, and existing literature on the target query."
+
+  - step: 2
+    action: "build"
+    harness_topology: "team('Research Office', 'Writing Office')"
+    instruction: "Draft a structured Markdown deliverable synthesizing gathered research data."
+
+  - step: 3
+    action: "evaluate"
+    criterion: "Verify factual consistency, check for missing citations, and evaluate tone."
+    halt_on_success: true
+
+  - step: 4
+    action: "improve"
+    instruction: "Feed evaluation feedback back into Step 2 if acceptance criteria are unmet."
