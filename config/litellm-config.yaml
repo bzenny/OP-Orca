@@ -1,0 +1,35 @@
+model_list:
+  # Zero-Cost & Fast Tier (Local Hardware via Ollama)
+  - model_name: "op-orca/free-fast"
+    litellm_params:
+      model: "ollama/qwen2.5:latest"
+      api_base: "http://op-orca-engine:11434"
+
+  # Zero-Cost & Deep Reasoning Tier (Local Hardware via Ollama)
+  - model_name: "op-orca/free-depth"
+    litellm_params:
+      model: "ollama/deepseek-r1:latest"
+      api_base: "http://op-orca-engine:11434"
+
+  # Zero-Cost Cloud Inference (Free OpenRouter Tier)
+  - model_name: "op-orca/cloud-free"
+    litellm_params:
+      model: "openrouter/meta-llama/llama-3.1-8b-instruct:free"
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  # High-Context Tier (Optional Free or Paid Gemini Key)
+  - model_name: "op-orca/high-context"
+    litellm_params:
+      model: "gemini/gemini-2.5-flash"
+      api_key: "os.environ/GEMINI_API_KEY"
+
+  # Top ELO / Premium Tier (Optional - Requires User API Key)
+  - model_name: "op-orca/top-rating"
+    litellm_params:
+      model: "anthropic/claude-3-5-sonnet-20241022"
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+
+router_settings:
+  fallbacks: [{"op-orca/cloud-free": ["op-orca/free-fast"]}]
+  num_retries: 2
+  timeout: 60
